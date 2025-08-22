@@ -1,7 +1,29 @@
 [package]
 name = "gg_namecard_web"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
 
 [dependencies]
-leptos = "0.8.6"
+leptos = { version = "*", features = ["csr"] }
+
+# ① 禁用默认特性，② 只开 wasm 能跑的
+# reqwest = { version = "0.12", default-features = false, features = [
+#     "json",
+#     "rustls-tls", # 纯 Rust TLS，无 OpenSSL
+# ] }
+
+# 其余
+puddle-farm-api-client_openapi_client = { path = "./puddle-farm-api-client" }
+base64 = "0.21"
+wasm-bindgen = "0.2"
+gg_namecard_gen = { path = "./gg_namecard_gen" }
+image = "0.25.6"
+leptos_meta = "0.8.5"
+reqwest = { version = "0.12", default-features = false, features = [
+    "json",
+    "multipart",
+    "rustls-tls",
+] }
+http = "1.3.1"
+send_wrapper = "0.6.0"
+console_error_panic_hook = "0.1.7"

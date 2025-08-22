@@ -1,0 +1,5 @@
+[tools]
+tailwindcss = "4.1.12"
+
+[[proxy]]
+backend = "https://puddle.farm/api/"
