@@ -1,7 +1,7 @@
 use cfg_if::cfg_if;
 
 use std::panic;
-use web_sys::window;
+use web_sys::{window,Crypto};
 
 cfg_if! {
     if #[cfg(target_arch = "wasm32")] {
@@ -54,24 +54,24 @@ cfg_if! {
 
                 // 创建一个新的 div 元素
                 let div = document.create_element("div").unwrap();
-
+            let crypto = window.crypto().unwrap();
 
             let html = format!(
                 r#"
 
-                <input type="checkbox" checked="checked" id="my_modal_6" class="modal-toggle 	" />
+                <input type="checkbox" checked="checked" id="my_modal_{id}" class="modal-toggle 	" />
                 <div class="modal " role="dialog" >
                   <div class="modal-box bg-error 	text-error-content h-1/2" >
                     <h3 class="text-lg font-bold">Error!</h3>
                     <p class="py-4 h-4/5 overflow-scroll"><span>{}</span></p>
                     <div class="modal-action">
-                      <label for="my_modal_6" class="btn">Close!</label>
+                      <label for="my_modal_{id}" class="btn">Close!</label>
                     </div>
                   </div>
                 </div>
 
                 "#,
-                msg.replace("\n", "<br>")
+                msg.replace("\n", "<br>"),id=crypto.random_uuid()
             );
             // 设置 div 的内容
             div.set_inner_html(html.as_str());
