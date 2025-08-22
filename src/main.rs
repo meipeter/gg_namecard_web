@@ -1,12 +1,17 @@
 
 use std::io::Cursor;
-
+mod panichook;
 use image::RgbImage;
+use leptos::logging::log;
 use leptos::mount::mount_to_body;
 use base64::{ write::EncoderWriter};
 fn main() {
-    console_error_panic_hook::set_once();
+    panichook::set_once();
+    //std::panic::catch_unwind(||{ mount_to_body(App);});
     mount_to_body(App);
+
+
+
 }
 use leptos::prelude::*;
 use leptos::control_flow::Show;
@@ -38,10 +43,12 @@ fn App() -> impl IntoView {
     });
     let handle_submit = move |_| {
             let i = id.get().parse::<i64>().unwrap();
-            img_gen.dispatch(i);};
+            if let Err(_)=std::panic::catch_unwind(||{img_gen.dispatch(i);}){
+                log!("12312");//这个没用desuwa
+            };};
     view! {
         <div class="flex items-center justify-center h-screen flex-col">
-
+            <h1>"GGST  namecard generator"</h1>
             <input type="text" class="input"
 
                     on:input:target=move |ev| {
@@ -64,13 +71,13 @@ fn App() -> impl IntoView {
                                   <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                   </svg>
-                                  <span>Error! Task failed successfully.</span>
+                                  <span>You must input a ggst player  s id</span>
                                 </div>}.into_any()
                     } else {
                         view!{}.into_any()
                     }}
                     </p>
-                <button class="btn btn-success"  on:click=handle_submit class:btn-disabled= move || !if_valid.get()>"生成"</button>
+                <button class="btn btn-success"  on:click=handle_submit class:btn-disabled= move || !if_valid.get()>"Gen"</button>
 
 
 
